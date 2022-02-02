@@ -1,19 +1,22 @@
 #include <iostream>
+#include <ctime>
 
-void PlayIntroduction()
+void PlayIntroduction(int Difficulty)
 {
-    std::cout << "Welcome to the xgame";
+    std::cout << "\n\nWelcome to the xgame\n\n";
+    std::cout << "You're an agent of chaos, you will be breaking into a level: " << Difficulty << " secured throne world...\n";
+    std::cout << "Enter the correct sequence to continue...\n\n";
 }
 
-void PlayGame()
+bool PlayGame(int Difficulty)
 {
-     std::cout << "You're an agent of chaos, you will be breaking into a secure throne world...\n";
-    std::cout << "Enter the correct sequence to continue...\n\n";
 
-    // Declare 3 number code
-    const int CodeA = 4;
-    const int CodeB = 3;
-    const int CodeC = 2;
+    PlayIntroduction(Difficulty);
+
+    // Generate Code
+    const int CodeA = rand() % Difficulty + Difficulty;
+    const int CodeB = rand() % Difficulty + Difficulty;
+    const int CodeC = rand() % Difficulty + Difficulty;
 
    const int CodeSum = CodeA + CodeB + CodeC;
    const int CodeProduct = (CodeA * CodeB) * CodeC;
@@ -35,16 +38,35 @@ void PlayGame()
     if (GuessSum == CodeSum && GuessProduct == CodeProduct)
     {
         std::cout << "\nYou win";
+        return true;
     } 
-    else {
-         std::cout << "\nYou lose!";
+    else 
+    {
+        std::cout << "\nYou lose!";
+        return false;
     }
 
 }
 
+
 int main()
 {   
-    PlayIntroduction();
-    PlayGame();
+    srand(time(NULL)) // create new random sequence based on time of day
+
+    int LevelDifficulty = 1;
+    int const MaxDifficulty = 5;
+
+    while(LevelDifficulty <= MaxDifficulty)
+    {
+        bool bLevelComplete = PlayGame(LevelDifficulty);
+        std::cin.clear(); // Clears any errors
+        std::cin.ignore(); // Discards the buffer
+
+        if (bLevelComplete)
+        {
+            ++LevelDifficulty;
+        }
+    }
+    std::cout << "\n*** Great work agent! You got all the runes! Now get out of there! ***\n";
     return 0;
 }
